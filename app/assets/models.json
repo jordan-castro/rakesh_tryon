@@ -1,0 +1,39 @@
+{
+    "customer": {
+        "title": "EpochTech",
+        "image": null,
+        "phone": "+1 484-302-2268"
+    },
+    "models": [
+        {
+            "id": 1,
+            "name": "3D Object Earings",
+            "type": "earing",
+            "element": "a-gltf-model",
+            "attributes": {
+                "src": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/scene.gltf",
+                "anchor_index": {
+                    "left": 127,
+                    "right": 356
+                },
+                "thumbnail": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/thumbnail.png",
+                "rotation": {
+                    "left": "-1 0 0",
+                    "right": "1 0 0"
+                },
+                "scale": "0.05 0.05 0.05",
+                "position": "0 -0.3 -0.3"
+            }
+        },
+        {
+            "id": 2,
+            "name": "Pixel Glasses",
+            "type": "glasses",
+            "element": "a-gltf-model",
+            "attributes": {
+                "src": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/glasses/scene.gltf",
+                "thumbnail": 
+            }
+        }
+    ]
+}
