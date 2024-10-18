@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-face-aframe.prod.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="/frontend/scripts/capture.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 200px;
+      background-color: #f0f0f0;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .ar-scene-container {
+      width: 100%;
+      height: 0;
+      padding-bottom: 75%; /* 4:3 aspect ratio */
+      position: relative;
+      overflow: hidden;
+    }
+    .ar-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .ar-scene a-scene,
+    .ar-scene video {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+    }
+    .bottom-panel {
+      width: 100%;
+      height: 100px;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .capture-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #ff4444;
+      border: none;
+      cursor: pointer;
+    }
+    .right-panel {
+      width: 250px;
+      background-color: #f8f8f8;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .model-switcher {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .model-switcher.selected {
+      border-color: #4CAF50;
+    }
+    .settings-option {
+      margin-bottom: 15px;
+    }
+    .settings-option label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .settings-option input,
+    .settings-option select {
+      width: 100%;
+      padding: 5px;
+    }
+  </style>
+
+  <script>
+    function addClickListeners() {
+      const elements = document.getElementsByClassName("model-switcher");
+      for (let element of elements) {
+        element.addEventListener("click", (event) => {
+          if (element.classList.contains("selected")) {
+            element.classList.remove("selected");
+          } else {
+            element.classList.add("selected");
+          }
+
+          console.log("Model clicked:", event.target.id);
+          const modelId = event.target.getAttribute("data-model-id");
+          const modelEntities = document.querySelectorAll("." + modelId + "-entity");
+
+          // Toggle visibility
+          modelEntities.forEach(entity => {
+            const isVisible = entity.getAttribute("visible");
+            entity.setAttribute("visible", !isVisible);
+          });
+        });
+      }
+    }
+  </script>
+
+  <script type="module">
+    import { getModelsForApp } from "/frontend/scripts/api.js";
+    document.addEventListener("DOMContentLoaded", async () => {
+      const modelsForApp = await getModelsForApp("pid", "secretKey123");
+      const modelSwitcherButtons = document.getElementById("model-switcher-buttons");
+      const aScene = document.getElementById("mainWindow");
+      const aAssets = document.getElementById("assets");
+
+      // Parse modelsForApp
+      modelsForApp.forEach(data => {
+        const model = data[0];
+        const modelId = model['name'].replaceAll(" ", "-") + model['id'];
+
+        // Create the <a-entity> for the 3D model
+        const aElement = document.createElement('a-entity');
+        aElement.setAttribute('mindar-face-target', `anchorIndex: ${model['default_anchorIndex']}`);
+        aElement.innerHTML = `
+          <a-gltf-model
+            rotation="${model['rotation']}"
+            position="${model['position']}"
+            scale="${model['scale']}"
+            src="#${modelId}"
+            class="${modelId}-entity"
+            visible="false"
+          ></a-gltf-model>
+        `;
+        aScene.appendChild(aElement);
+
+        // Create the <a-asset-item> for loading the model
+        const assetItem = document.createElement('a-asset-item');
+        assetItem.setAttribute('id', modelId);
+        assetItem.setAttribute('src', model['path']);
+        aAssets.appendChild(assetItem);
+
+        // Create the image button for toggling the model
+        const imageButton = document.createElement('img');
+        imageButton.setAttribute('id', modelId + "IMG");
+        imageButton.setAttribute('src', model['image_path']);
+        imageButton.setAttribute('data-model-id', modelId);  // Used to link to the model
+        imageButton.classList.add("model-switcher");
+        modelSwitcherButtons.appendChild(imageButton);
+      });
+
+      // Once models and buttons are added, set up click listeners
+      addClickListeners();
+    });
+  </script>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <h2>Settings</h2>
+      <div class="settings-option">
+        <label for="brightness">Brightness</label>
+        <input type="range" id="brightness" min="0" max="100" value="50">
+      </div>
+      <div class="settings-option">
+        <label for="contrast">Contrast</label>
+        <input type="range" id="contrast" min="0" max="100" value="50">
+      </div>
+      <div class="settings-option">
+        <label for="filter">Filter</label>
+        <select id="filter">
+          <option value="none">None</option>
+          <option value="grayscale">Grayscale</option>
+          <option value="sepia">Sepia</option>
+        </select>
+      </div>
+      <div class="settings-option">
+        <button type="button" onclick="capture()">Capture</button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="ar-scene-container">
+        <div class="ar-scene">
+          <a-scene mindar-face embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights"
+            xr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="mainWindow">
+            <a-assets id="assets">
+              <a-asset-item id="headModel"
+                src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/sparkar/headOccluder.glb"></a-asset-item>
+            </a-assets>
+            <a-camera active="true" position="0 0 0"></a-camera>
+
+            <!-- Head occluder -->
+            <a-entity mindar-face-target="anchorIndex: 168">
+              <a-gltf-model mindar-face-occluder position="0 -0.3 0.15" rotation="0 0 0" scale="0.065 0.065 0.065"
+                src="#headModel"></a-gltf-model>
+            </a-entity>
+          </a-scene>
+        </div>
+      </div>
+      <!-- <div class="bottom-panel">
+        <button class="capture-button" onclick="capture()"></button>
+      </div> -->
+    </div>
+
+    <div class="right-panel">
+      <h2>Model Switcher</h2>
+      <div class="model-grid" id="model-switcher-buttons">
+        <!-- Model switcher buttons will be dynamically added here -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

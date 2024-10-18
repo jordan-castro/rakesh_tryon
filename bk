@@ -1,0 +1,72 @@
+  <script>
+    function addClickListeners() {
+      const elements = document.getElementsByClassName("model-switcher");
+      for (let element of elements) {
+        element.addEventListener("click", (event) => {
+          if (element.classList.contains("selected")) {
+            element.classList.remove("selected");
+          } else {
+            element.classList.add("selected");
+          }
+
+          console.log("Model clicked:", event.target.id);
+          const modelId = event.target.getAttribute("data-model-id");
+          const modelEntities = document.querySelectorAll("." + modelId + "-entity");
+
+          // Toggle visibility
+          modelEntities.forEach(entity => {
+            const isVisible = entity.getAttribute("visible");
+            entity.setAttribute("visible", !isVisible);
+          });
+        });
+      }
+    }
+  </script>
+
+  <script type="module">
+    import { getModelsForApp } from "/frontend/scripts/api.js";
+    document.addEventListener("DOMContentLoaded", async () => {
+      const modelsForApp = await getModelsForApp("pid", "secretKey123");
+      const modelSwitcherButtons = document.getElementById("model-switcher-buttons");
+      const aScene = document.getElementById("mainWindow");
+      const aAssets = document.getElementById("assets");
+
+      // Parse modelsForApp
+      modelsForApp.forEach(data => {
+        const model = data[0];
+        const modelId = model['name'].replaceAll(" ", "-") + model['id'];
+
+        // Create the <a-entity> for the 3D model
+        const aElement = document.createElement('a-entity');
+        aElement.setAttribute('mindar-face-target', `anchorIndex: ${model['default_anchorIndex']}`);
+        aElement.innerHTML = `
+          <a-gltf-model
+            rotation="${model['rotation']}"
+            position="${model['position']}"
+            scale="${model['scale']}"
+            src="#${modelId}"
+            class="${modelId}-entity"
+            visible="false"
+          ></a-gltf-model>
+        `;
+        aScene.appendChild(aElement);
+
+        // Create the <a-asset-item> for loading the model
+        const assetItem = document.createElement('a-asset-item');
+        assetItem.setAttribute('id', modelId);
+        assetItem.setAttribute('src', model['path']);
+        aAssets.appendChild(assetItem);
+
+        // Create the image button for toggling the model
+        const imageButton = document.createElement('img');
+        imageButton.setAttribute('id', modelId + "IMG");
+        imageButton.setAttribute('src', model['image_path']);
+        imageButton.setAttribute('data-model-id', modelId);  // Used to link to the model
+        imageButton.classList.add("model-switcher");
+        modelSwitcherButtons.appendChild(imageButton);
+      });
+
+      // Once models and buttons are added, set up click listeners
+      addClickListeners();
+    });
+  </script>
