@@ -4,36 +4,54 @@
         "image": null,
         "phone": "+1 484-302-2268"
     },
+    "assets": [
+        {
+            "id": "earing",
+            "src": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/scene.gltf"
+        }
+    ],
     "models": [
         {
             "id": 1,
             "name": "3D Object Earings",
             "type": "earing",
-            "element": "a-gltf-model",
-            "attributes": {
-                "src": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/scene.gltf",
-                "anchor_index": {
-                    "left": 127,
-                    "right": 356
+            "thumbnail": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/thumbnail.png",
+            "html": [
+                {
+                    "tag": "a-entity",
+                    "mindar-face-target": "anchorIndex: 127",
+                    "html": [
+                        {
+                            "tag": "a-gltf-model",
+                            "src": "#assetearing",
+                            "position": "0 -0.3 -0.3",
+                            "scale": "0.05 0.05 0.05",
+                            "rotation": "-1 0 0"
+                        }
+                    ]
                 },
-                "thumbnail": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/thumbnail.png",
-                "rotation": {
-                    "left": "-1 0 0",
-                    "right": "1 0 0"
-                },
-                "scale": "0.05 0.05 0.05",
-                "position": "0 -0.3 -0.3"
-            }
+                {
+                    "tag": "a-entity",
+                    "mindar-face-target": "anchorIndex: 356",
+                    "html": [
+                        {
+                            "tag": "a-gltf-model",
+                            "src": "#assetearing",
+                            "position": "0 -0.3 -0.3",
+                            "scale": "0.05 0.05 0.05",
+                            "rotation": "1 0 0"
+                        }
+                    ]
+                }
+            ]
         },
         {
             "id": 2,
-            "name": "Pixel Glasses",
-            "type": "glasses",
-            "element": "a-gltf-model",
-            "attributes": {
-                "src": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/glasses/scene.gltf",
-                "thumbnail": 
-            }
+            "name": "3D Object Bracelet",
+            "type": "bracelet",
+            "thumbnail": "https://th.pandora.net/dw/image/v2/BJRN_PRD/on/demandware.static/-/Sites-pandora-master-catalog/default/dwf6cf1993/productimages/singlepackshot/562731C00_RGB.jpg?sw=900&sh=900&sm=fit&sfrm=png&bgcolor=F5F5F5",
+            "html": [
+            ]
         }
     ]
 }

@@ -1,72 +1,76 @@
-  <script>
-    function addClickListeners() {
-      const elements = document.getElementsByClassName("model-switcher");
-      for (let element of elements) {
-        element.addEventListener("click", (event) => {
-          if (element.classList.contains("selected")) {
-            element.classList.remove("selected");
-          } else {
-            element.classList.add("selected");
-          }
+  // <script>
+  //   function addClickListeners() {
+  //     const elements = document.getElementsByClassName("model-switcher");
+  //     for (let element of elements) {
+  //       element.addEventListener("click", (event) => {
+  //         if (element.classList.contains("selected")) {
+  //           element.classList.remove("selected");
+  //         } else {
+  //           element.classList.add("selected");
+  //         }
 
-          console.log("Model clicked:", event.target.id);
-          const modelId = event.target.getAttribute("data-model-id");
-          const modelEntities = document.querySelectorAll("." + modelId + "-entity");
+  //         console.log("Model clicked:", event.target.id);
+  //         const modelId = event.target.getAttribute("data-model-id");
+  //         const modelEntities = document.querySelectorAll("." + modelId + "-entity");
 
-          // Toggle visibility
-          modelEntities.forEach(entity => {
-            const isVisible = entity.getAttribute("visible");
-            entity.setAttribute("visible", !isVisible);
-          });
-        });
-      }
-    }
-  </script>
+  //         // Toggle visibility
+  //         modelEntities.forEach(entity => {
+  //           const isVisible = entity.getAttribute("visible");
+  //           entity.setAttribute("visible", !isVisible);
+  //         });
+  //       });
+  //     }
+  //   }
+  // </script>
 
-  <script type="module">
-    import { getModelsForApp } from "/frontend/scripts/api.js";
-    document.addEventListener("DOMContentLoaded", async () => {
-      const modelsForApp = await getModelsForApp("pid", "secretKey123");
-      const modelSwitcherButtons = document.getElementById("model-switcher-buttons");
-      const aScene = document.getElementById("mainWindow");
-      const aAssets = document.getElementById("assets");
+  // <script type="module">
+  //   import { getModelsForApp } from "/frontend/scripts/api.js";
+  //   document.addEventListener("DOMContentLoaded", async () => {
+  //     const modelsForApp = await getModelsForApp("pid", "secretKey123");
+  //     const modelSwitcherButtons = document.getElementById("model-switcher-buttons");
+  //     const aScene = document.getElementById("mainWindow");
+  //     const aAssets = document.getElementById("assets");
 
-      // Parse modelsForApp
-      modelsForApp.forEach(data => {
-        const model = data[0];
-        const modelId = model['name'].replaceAll(" ", "-") + model['id'];
+  //     // Parse modelsForApp
+  //     modelsForApp.forEach(data => {
+  //       const model = data[0];
+  //       const modelId = model['name'].replaceAll(" ", "-") + model['id'];
 
-        // Create the <a-entity> for the 3D model
-        const aElement = document.createElement('a-entity');
-        aElement.setAttribute('mindar-face-target', `anchorIndex: ${model['default_anchorIndex']}`);
-        aElement.innerHTML = `
-          <a-gltf-model
-            rotation="${model['rotation']}"
-            position="${model['position']}"
-            scale="${model['scale']}"
-            src="#${modelId}"
-            class="${modelId}-entity"
-            visible="false"
-          ></a-gltf-model>
-        `;
-        aScene.appendChild(aElement);
+  //       // Create the <a-entity> for the 3D model
+  //       const aElement = document.createElement('a-entity');
+  //       aElement.setAttribute('mindar-face-target', `anchorIndex: ${model['default_anchorIndex']}`);
+  //       aElement.innerHTML = `
+  //         <a-gltf-model
+  //           rotation="${model['rotation']}"
+  //           position="${model['position']}"
+  //           scale="${model['scale']}"
+  //           src="#${modelId}"
+  //           class="${modelId}-entity"
+  //           visible="false"
+  //         ></a-gltf-model>
+  //       `;
+  //       aScene.appendChild(aElement);
 
-        // Create the <a-asset-item> for loading the model
-        const assetItem = document.createElement('a-asset-item');
-        assetItem.setAttribute('id', modelId);
-        assetItem.setAttribute('src', model['path']);
-        aAssets.appendChild(assetItem);
+  //       // Create the <a-asset-item> for loading the model
+  //       const assetItem = document.createElement('a-asset-item');
+  //       assetItem.setAttribute('id', modelId);
+  //       assetItem.setAttribute('src', model['path']);
+  //       aAssets.appendChild(assetItem);
 
-        // Create the image button for toggling the model
-        const imageButton = document.createElement('img');
-        imageButton.setAttribute('id', modelId + "IMG");
-        imageButton.setAttribute('src', model['image_path']);
-        imageButton.setAttribute('data-model-id', modelId);  // Used to link to the model
-        imageButton.classList.add("model-switcher");
-        modelSwitcherButtons.appendChild(imageButton);
-      });
+  //       // Create the image button for toggling the model
+  //       const imageButton = document.createElement('img');
+  //       imageButton.setAttribute('id', modelId + "IMG");
+  //       imageButton.setAttribute('src', model['image_path']);
+  //       imageButton.setAttribute('data-model-id', modelId);  // Used to link to the model
+  //       imageButton.classList.add("model-switcher");
+  //       modelSwitcherButtons.appendChild(imageButton);
+  //     });
 
-      // Once models and buttons are added, set up click listeners
-      addClickListeners();
-    });
-  </script>
+  //     // Once models and buttons are added, set up click listeners
+  //     addClickListeners();
+  //   });
+  // </script>
+
+
+
+// array(3) { ["tag"]=> string(9) "a-element"["mindar-face-target"]=> string(16) "anchorIndex: 127"["html"]=> array(1) { [0]=> array(5) { ["tag"]=> string(12) "a-gltf-model"["src"]=> string(100) "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/scene.gltf"["position"]=> string(11) "0 -0.3 -0.3"["scale"]=> string(14) "0.05 0.05 0.05"["rotation"]=> string(6) "-1 0 0" } } } array(3) { ["tag"]=> string(9) "a-element"["mindar-face-target"]=> string(16) "anchorIndex: 356"["html"]=> array(1) { [0]=> array(5) { ["tag"]=> string(12) "a-gltf-model"["src"]=> string(100) "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/scene.gltf"["position"]=> string(11) "0 -0.3 -0.3"["scale"]=> string(14) "0.05 0.05 0.05"["rotation"]=> string(5) "1 0 0" } } }
