@@ -162,13 +162,13 @@ function convertJsonToHtml($json)
         <canvas id="handTrackingCanvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
     </div>
 
-    <script src="/scripts/tryonutils.js"></script>
+    <script src="/scripts/utils.js"></script>
     <script src="/scripts/tryon.js"></script>
 
     <script type="module">
         import {
             HandTracking
-        } from "/scripts/tryonbody.js";
+        } from "/scripts/handTracking.js";
 
         const loadingScreen = document.getElementById('loading-screen');
         const sceneEl = document.querySelector('a-scene');

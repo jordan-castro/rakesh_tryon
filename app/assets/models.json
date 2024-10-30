@@ -53,12 +53,12 @@
             "html": [
                 {
                     "tag": "a-entity",
-                    "mediapipe-hand-target": "anchorIndex: 0",
+                    "mediapipe-hand-target": "0",
                     "html": [
                         {
                             "tag": "a-image",
                             "src": "/assets/images/562731C00_RGB.webp",
-                            "tsp-bckg": "",
+                            "tsp-bckg": true,
                             "position": "0 0 -1",
                             "scale": "0.1 0.1 0.1"
                         }

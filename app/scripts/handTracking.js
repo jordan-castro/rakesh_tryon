@@ -137,7 +137,7 @@ class HandTracking {
             landmarks: handData.landmarks.map(hand => ({
                 handIndex: hand.handIndex,
                 points: hand.points.map(point => 
-                    this.backIntoCoords(point, canvasSize)
+                    TryonUtils.backIntoCoords(point, canvasSize)
                 )
             }))
         };

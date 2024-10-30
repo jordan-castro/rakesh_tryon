@@ -12,6 +12,19 @@ function toggleModel(modelId) {
     }
 }
 
+function followHand(index, element) {
+    // get hand positions.
+    const landmarks = window.handTracking.getHandLandmarksInPixels().landmarks;
+    if (landmarks.length == 0) {
+        return;
+    }
+    // find index
+    let landmark = landmarks[0].points[index];
+
+    // set element to that position.
+    element.setAttribute("position", `${landmark.x} ${landmark.y} ${landmark.z}`);
+}
+
 // This helps us work with our aframe mediapipe objects.
 // I want to get all elements that have the attribute "mediapipe-hand-target"
 function setupHandTargets() {
@@ -19,16 +32,20 @@ function setupHandTargets() {
     const transparencyGen = new ImageTransparency();
     
     for (let el of handTargets) {
+        const child = el.children[0];
         // check for "transparent-background" attribute
-        if (el.attributes.getNamedItem("tsp-bckg") !== null) {
+        if (child.getAttribute("tsp-bckg") !== null) {
             // make the bck transparent <-- only works for white.
-            transparencyGen.makeBackgroundTransparent(el.getAttribute("src")).then((val) => {
-                el.setAttribute("src", val);
+            transparencyGen.makeBackgroundTransparent(child.getAttribute("src")).then((val) => {
+                child.setAttribute("src", val);
             }).catch((e) => {
                 console.error("ERROR: " + e);
             });
         }
 
         // here we want to set a listener to follow the position of the hands.
+        setInterval(() => {
+            followHand(el.getAttribute("mediapipe-hand-target"), child);
+        }, 10);
     }
 }
