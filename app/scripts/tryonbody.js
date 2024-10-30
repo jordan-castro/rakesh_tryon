@@ -57,10 +57,15 @@ class HandTracking {
     };
 
     predictWebcam = async () => {
-        this.canvas.style.width = this.mindarVideo.clientWidth;
-        this.canvas.style.height = this.mindarVideo.clientHeight;
-        this.canvas.width = this.mindarVideo.clientWidth;
-        this.canvas.height = this.mindarVideo.clientHeight;  
+        this.canvas.width = this.mindarVideo.style.width.split("px")[0];
+        this.canvas.height = this.mindarVideo.style.height.split("px")[0];
+        this.canvas.style.position = this.mindarVideo.style.position;
+        this.canvas.style.top = this.mindarVideo.style.top;
+        this.canvas.style.left = this.mindarVideo.style.left;
+        // this.canvas.style.width = this.mindarVideo.clientWidth;
+        // this.canvas.style.height = this.mindarVideo.clientHeight;
+        // this.canvas.width = this.mindarVideo.clientWidth;
+        // this.canvas.height = this.mindarVideo.clientHeight;  
 
         let startTimeMs = performance.now();
         if (this.lastVideoTime !== this.video.currentTime) {
@@ -96,70 +101,48 @@ class HandTracking {
             numHands: 2
         });
     };
+
+    getHandLandmarks = () => {
+        if (!this.results?.landmarks) {
+            return {
+                numberOfHands: 0,
+                landmarks: []
+            };
+        }
+
+        return {
+            numberOfHands: this.results.landmarks.length,
+            landmarks: this.results.landmarks.map((handLandmarks, index) => ({
+                handIndex: index,
+                points: handLandmarks.map((point, pointIndex) => ({
+                    x: point.x,
+                    y: point.y,
+                    z: point.z,
+                    index: pointIndex
+                }))
+            }))
+        };
+    };
+
+    // Utility method to convert all hand landmarks to pixel coordinates
+    getHandLandmarksInPixels = () => {
+        const handData = this.getHandLandmarks();
+        const canvasSize = {
+            width: this.canvas.width,
+            height: this.canvas.height
+        };
+
+        return {
+            numberOfHands: handData.numberOfHands,
+            landmarks: handData.landmarks.map(hand => ({
+                handIndex: hand.handIndex,
+                points: hand.points.map(point => 
+                    this.backIntoCoords(point, canvasSize)
+                )
+            }))
+        };
+    };
+    
 }
-
-// const createHandLandmarker = async () => {
-//     const vision = await FilesetResolver.forVisionTasks(
-//         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
-//     );
-//     handLandmarker = await HandLandmarker.createFromOptions(vision, {
-//         baseOptions: {
-//             modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
-//             delegate: "GPU"
-//         },
-//         runningMode: "VIDEO",
-//         numHands: 2
-//     });
-// };
-
-// createHandLandmarker();
-
-// const hasGetUserMedia = () => !!navigator.mediaDevices?.getUserMedia;
-// if (hasGetUserMedia()) {
-
-//     const constraints = {
-//         video: true
-//     };
-
-//     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-//         video.srcObject = stream;
-//         video.addEventListener("loadeddata", predictWebcam);
-//     })
-//     let lastVideoTime = -1;
-//     let results = undefined;
-//     console.log(video);
-//     async function predictWebcam() {
-//         canvas.style.width = video.videoWidth;;
-//         canvas.style.height = video.videoHeight;
-//         canvas.width = video.videoWidth;
-//         canvas.height = video.videoHeight;
-
-//         // // Now let's start detecting the stream.
-//         // if (runningMode === "IMAGE") {
-//         //     runningMode = "VIDEO";
-//         //     await handLandmarker.setOptions({ runningMode: "VIDEO" });
-//         // }
-//         let startTimeMs = performance.now();
-//         if (lastVideoTime !== video.currentTime) {
-//             lastVideoTime = video.currentTime;
-//             results = handLandmarker.detectForVideo(video, startTimeMs);
-//         }
-//         ctx.save();
-//         ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-//         if (results.landmarks) {
-//             for (const landmarks of results.landmarks) {
-//                 drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
-//                     color: "#00FF00",
-//                     lineWidth: 5
-//                 });
-//                 drawLandmarks(ctx, landmarks, { color: "#FF0000", lineWidth: 2 });
-//             }
-//         }
-//         ctx.restore();
-//         window.requestAnimationFrame(predictWebcam);
-//     }
-// } else {
-//     console.warn("getUserMedia() is not supported by your browser");
-// }
 
 export { HandTracking };

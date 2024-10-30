@@ -49,8 +49,21 @@
             "id": 2,
             "name": "3D Object Bracelet",
             "type": "bracelet",
-            "thumbnail": "https://th.pandora.net/dw/image/v2/BJRN_PRD/on/demandware.static/-/Sites-pandora-master-catalog/default/dwf6cf1993/productimages/singlepackshot/562731C00_RGB.jpg?sw=900&sh=900&sm=fit&sfrm=png&bgcolor=F5F5F5",
+            "thumbnail": "/assets/images/562731C00_RGB.webp",
             "html": [
+                {
+                    "tag": "a-entity",
+                    "mediapipe-hand-target": "anchorIndex: 0",
+                    "html": [
+                        {
+                            "tag": "a-image",
+                            "src": "/assets/images/562731C00_RGB.webp",
+                            "tsp-bckg": "",
+                            "position": "0 0 -1",
+                            "scale": "0.1 0.1 0.1"
+                        }
+                    ]
+                }
             ]
         }
     ]

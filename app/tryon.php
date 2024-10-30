@@ -57,6 +57,7 @@ function convertJsonToHtml($json)
     <script src="/assets/js/mindar-aframe.js"></script>
     <script src="/assets/js/jsshare.js"></script>
 
+
     <!-- MediaPipe -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
         crossorigin="anonymous"></script>
@@ -161,6 +162,9 @@ function convertJsonToHtml($json)
         <canvas id="handTrackingCanvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
     </div>
 
+    <script src="/scripts/tryonutils.js"></script>
+    <script src="/scripts/tryon.js"></script>
+
     <script type="module">
         import {
             HandTracking
@@ -180,6 +184,7 @@ function convertJsonToHtml($json)
             //     document.querySelector("#handTrackingCanvas").getContext("2d")
             // );
             handTracking.init();
+            setupHandTargets();
         });
 
         // // Handle start button click
