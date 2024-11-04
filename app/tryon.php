@@ -145,7 +145,7 @@ function convertJsonToHtml($json)
                 </a-asset-item>
 
                 <?php foreach ($data['assets'] as $asset) { ?>
-                    <a-asset-item id="asset<?= $asset['id'] ?>" src="<?= $asset['src'] ?>"></a-asset-item>
+                    <a-asset-item id="<?= $asset['id'] ?>" src="<?= $asset['src'] ?>"></a-asset-item>
                 <?php } ?>
             </a-assets>
 
@@ -173,7 +173,7 @@ function convertJsonToHtml($json)
         const loadingScreen = document.getElementById('loading-screen');
         const sceneEl = document.querySelector('a-scene');
 
-        window.handTracking = new HandTracking();
+        window.handTracking = new HandTracking(true);
 
         // Hide loading screen when scene is loaded
         sceneEl.addEventListener('loaded', () => {
@@ -184,6 +184,7 @@ function convertJsonToHtml($json)
             //     document.querySelector("#handTrackingCanvas").getContext("2d")
             // );
             handTracking.init();
+            setupAll();
             setupHandTargets();
         });
 

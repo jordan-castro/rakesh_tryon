@@ -1,0 +1,20 @@
+import "doc"
+
+async fn setup_all() {
+    // get any elements with class "tsp-bckg"
+    elements := get_elements({
+        "className": "tsp-bckg"
+    })
+
+    if elements.length == 0 {
+        return 
+    }
+
+    transparency_gen = ImageTransparency()
+    for element in elements {
+        new_src = await transparency_gen.makeBackgroundTransparent(element.src)
+        if new_src != "" {
+            element.src = new_src
+        }
+    }
+}

@@ -8,6 +8,10 @@
         {
             "id": "earing",
             "src": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/earring/scene.gltf"
+        },
+        {
+            "id": "3dbrace",
+            "src": "/assets/models/brace.glb"
         }
     ],
     "models": [
@@ -20,10 +24,11 @@
                 {
                     "tag": "a-entity",
                     "mindar-face-target": "anchorIndex: 127",
+                    "visible": "false",
                     "html": [
                         {
                             "tag": "a-gltf-model",
-                            "src": "#assetearing",
+                            "src": "#earing",
                             "position": "0 -0.3 -0.3",
                             "scale": "0.05 0.05 0.05",
                             "rotation": "-1 0 0"
@@ -33,10 +38,11 @@
                 {
                     "tag": "a-entity",
                     "mindar-face-target": "anchorIndex: 356",
+                    "visible": "false",
                     "html": [
                         {
                             "tag": "a-gltf-model",
-                            "src": "#assetearing",
+                            "src": "#earing",
                             "position": "0 -0.3 -0.3",
                             "scale": "0.05 0.05 0.05",
                             "rotation": "1 0 0"
@@ -46,7 +52,28 @@
             ]
         },
         {
-            "id": 2,
+            "id": 3,
+            "name": "2D image earings",
+            "type": "2d-earing",
+            "html": [
+                {
+                    "tag": "a-entity",
+                    "mindar-face-target": "anchorIndex: 127",
+                    "html": [
+                        {
+                            "tag": "a-image",
+                            "src": "/assets/images/earing.png",
+                            "position": "0 -0.3 -0.3",
+                            "scale": "0.5 0.5 0.5",
+                            "rotation": "1 0 0",
+                            "class": "tsp-bckg"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 4,
             "name": "3D Object Bracelet",
             "type": "bracelet",
             "thumbnail": "/assets/images/562731C00_RGB.webp",
@@ -56,11 +83,10 @@
                     "mediapipe-hand-target": "0",
                     "html": [
                         {
-                            "tag": "a-image",
-                            "src": "/assets/images/562731C00_RGB.webp",
-                            "tsp-bckg": true,
-                            "position": "0 0 -1",
-                            "scale": "0.1 0.1 0.1"
+                            "tag": "a-gltf-model",
+                            "src": "#3dbrace",
+                            "position": "0 0 0",
+                            "scale": "0.2 0.2 0.2"
                         }
                     ]
                 }

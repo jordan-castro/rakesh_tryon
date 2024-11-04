@@ -3,7 +3,8 @@
 import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
 
 class HandTracking {
-    constructor() {
+    constructor(debug) {
+        this.isDebugMode = debug;
         this.handLandmarker = undefined;
         this.results = undefined;
         this.video = undefined;
@@ -73,18 +74,20 @@ class HandTracking {
             this.results = await this.handLandmarker.detectForVideo(this.video, startTimeMs);
         }
 
-        this.ctx.save();
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        if (this.results?.landmarks) {
-            for (const landmarks of this.results.landmarks) {
-                drawConnectors(this.ctx, landmarks, HAND_CONNECTIONS, {
-                    color: "#00FF00",
-                    lineWidth: 5
-                });
-                drawLandmarks(this.ctx, landmarks, { color: "#FF0000", lineWidth: 2 });
+        if (this.isDebugMode) {
+            this.ctx.save();
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            if (this.results?.landmarks) {
+                for (const landmarks of this.results.landmarks) {
+                    drawConnectors(this.ctx, landmarks, HAND_CONNECTIONS, {
+                        color: "#00FF00",
+                        lineWidth: 5
+                    });
+                    drawLandmarks(this.ctx, landmarks, { color: "#FF0000", lineWidth: 2 });
+                }
             }
+            this.ctx.restore();
         }
-        this.ctx.restore();
         window.requestAnimationFrame(this.predictWebcam);
     };
 
@@ -136,13 +139,13 @@ class HandTracking {
             numberOfHands: handData.numberOfHands,
             landmarks: handData.landmarks.map(hand => ({
                 handIndex: hand.handIndex,
-                points: hand.points.map(point => 
+                points: hand.points.map(point =>
                     TryonUtils.backIntoCoords(point, canvasSize)
                 )
             }))
         };
     };
-    
+
 }
 
 export { HandTracking };
